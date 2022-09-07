@@ -1,10 +1,50 @@
-use std::cell::Cell;
-use std::cell::UnsafeCell;
+// use std::cell::Cell;
+// use std::cell::UnsafeCell;
+
+
+// struct SelfRef<'a> {
+//     value: String,
+
+//     // 该引用指向上面的value
+//     pointer_to_value: &'a str,
+// }
+#[derive(Debug)]
+struct WhatAboutThis<'a> {
+    name: String,
+    nickname: Option<&'a str>,
+}
+
+// fn creator<'a>() -> WhatAboutThis<'a> {
+//     let mut tricky = WhatAboutThis {
+//         name: "Annabelle".to_string(),
+//         nickname: None,
+//     };
+//     tricky.nickname = Some(&tricky.name[..4]);
+
+//     tricky
+// }
 
 fn main() {
-    fn opaque_read(val: &i32) {
-        println!("{}", val);
-    }
+
+    // let s = "aaa".to_string();
+    // let v = SelfRef {
+    //     value: s,
+    //     pointer_to_value: &s
+    // };
+
+    // 在某种程度上来说，`Option` 这个方法可以工作，但是这个方法的限制较多，例如从一个函数创建并返回它是不可能的：
+    // let mut tricky = WhatAboutThis {
+    //     name: "Annabelle".to_string(),
+    //     nickname: None,
+    // };
+    // tricky.nickname = Some(&tricky.name[..4]);
+
+    // println!("{:?}", tricky);
+
+
+    // fn opaque_read(val: &i32) {
+    //     println!("{}", val);
+    // }
     
     // unsafe {
     //     let mut data = 10;
@@ -87,31 +127,31 @@ fn main() {
     //     println!("{}", *data.get());
     // }
 
-    unsafe {
-        let mut data = UnsafeCell::new(10);
-        let mref1 = &mut data;
-        let sref2 = &*mref1;
-        let ptr3 = sref2.get();
+    // unsafe {
+    //     let mut data = UnsafeCell::new(10);
+    //     let mref1 = &mut data;
+    //     let sref2 = &*mref1;
+    //     let ptr3 = sref2.get();
 
-        *ptr3 += 3;
-        opaque_read(&*sref2.get());
-        *sref2.get() += 2;
-        *mref1.get() += 1;
+    //     *ptr3 += 3;
+    //     opaque_read(&*sref2.get());
+    //     *sref2.get() += 2;
+    //     *mref1.get() += 1;
 
-        println!("{}", *data.get());
-    }
+    //     println!("{}", *data.get());
+    // }
 
-    unsafe {
-        let mut data = Box::new(10);
-        let ptr1 = (&mut *data) as *mut i32;
+    // unsafe {
+    //     let mut data = Box::new(10);
+    //     let ptr1 = (&mut *data) as *mut i32;
     
-        // *data += 10;
-        *ptr1 += 1;
-        *data += 10;
+    //     // *data += 10;
+    //     *ptr1 += 1;
+    //     *data += 10;
     
-        // Should be 21
-        println!("{}", data);
-    }
+    //     // Should be 21
+    //     println!("{}", data);
+    // }
 
     
 }
